@@ -1,8 +1,21 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. ProcessRecord.
 
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT INPUT-FILE ASSIGN TO 'input/input.txt'
+               ORGANIZATION IS LINE SEQUENTIAL.
+
        DATA DIVISION.
+       FILE SECTION.
+       FD  INPUT-FILE.
+       01  WS-INPUT-RECORD     PIC X(250).
+
        WORKING-STORAGE SECTION.
+       01  WS-EOF              PIC X     VALUE 'N'.
+       01  WS-BUCH-NR          PIC 9(04) VALUE 0.
        01  WS-AUTOR-NR         PIC 9(02) VALUE 0.
        01  WS-AUTOR-IDX        PIC 9(02) VALUE 0.
 
@@ -24,14 +37,29 @@
        PROCEDURE DIVISION USING PR-INPUT-RECORD
                                 PR-BUCH-NR
                                 LK-BUECHER-LISTE.
-           ADD 1 TO PR-BUCH-NR
-           MOVE PR-BUCH-NR TO LK-BUECHER-ANZAHL
-           SET BUCH-IDX TO PR-BUCH-NR
-           MOVE PR-BUCH-NR TO LK-BUCH-ID(BUCH-IDX)
+           MOVE 0 TO LK-BUECHER-ANZAHL
+           OPEN INPUT INPUT-FILE
+           PERFORM UNTIL WS-EOF = 'Y'
+               READ INPUT-FILE INTO WS-INPUT-RECORD
+                   AT END MOVE 'Y' TO WS-EOF
+                   NOT AT END
+                       IF WS-BUCH-NR < 500
+                           PERFORM PROCESS-RECORD
+                       END-IF
+               END-READ
+           END-PERFORM
+           CLOSE INPUT-FILE
+           MOVE WS-BUCH-NR TO PR-BUCH-NR
+           EXIT PROGRAM.
+
+       PROCESS-RECORD.
+           ADD 1 TO WS-BUCH-NR
+           MOVE WS-BUCH-NR TO LK-BUECHER-ANZAHL
+           SET BUCH-IDX TO WS-BUCH-NR
 
            MOVE SPACES TO WS-FELDER
 
-           UNSTRING PR-INPUT-RECORD DELIMITED BY ', '
+           UNSTRING WS-INPUT-RECORD DELIMITED BY ', '
                INTO WS-ISBN
                     WS-TITEL
                     WS-AUTOREN-STR
@@ -39,6 +67,7 @@
                     WS-VERLAG
            END-UNSTRING
 
+           MOVE WS-ISBN      TO LK-BUCH-ID(BUCH-IDX)
            MOVE WS-TITEL     TO LK-BUCH-TITEL(BUCH-IDX)
            MOVE WS-KATEGORIE TO LK-BUCH-KATEGORIE(BUCH-IDX)
            MOVE WS-VERLAG    TO LK-BUCH-VERLAG(BUCH-IDX)
@@ -59,6 +88,4 @@
                SET AUTOR-IDX TO WS-AUTOR-IDX
                MOVE WS-AUTOR(WS-AUTOR-IDX) TO
                    LK-AUTOR-NAME(BUCH-IDX AUTOR-IDX)
-           END-PERFORM
-
-           EXIT PROGRAM.
+           END-PERFORM.
