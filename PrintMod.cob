@@ -33,7 +33,7 @@ IDENTIFICATION DIVISION.
           05 WS-DET-AUTOR     PIC X(40).
 
        LINKAGE SECTION.
-           COPY Library
+           COPY library.
            
        01 LK-SUCH-ID               PIC X(30).
 
@@ -82,3 +82,4 @@ IDENTIFICATION DIVISION.
            END-PERFORM.
 
            GOBACK.
+           
