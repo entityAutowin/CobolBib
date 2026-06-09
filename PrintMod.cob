@@ -1,5 +1,5 @@
-IDENTIFICATION DIVISION.
-       PROGRAM-ID. BUECHER-PRINT-MODUL.
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. PrintMod.
        AUTHOR.     UNSERE-NAMEN.
 
        ENVIRONMENT DIVISION.
@@ -11,7 +11,7 @@ IDENTIFICATION DIVISION.
           05 FILLER       PIC X(60) VALUE 
           "============================================================".
        01 WS-HEADER-2.
-          05 FILLER       PIC X(7)  VALUE "ID     ".
+          05 FILLER       PIC X(31)  VALUE "ID                            ".
           05 FILLER       PIC X(25) VALUE "TITEL                    ".
           05 FILLER       PIC X(15) VALUE "KATEGORIE      ".
           05 FILLER       PIC X(13) VALUE "VERLAG       ".
@@ -20,7 +20,7 @@ IDENTIFICATION DIVISION.
           "------------------------------------------------------------".
 
        01 WS-BUCH-ZEILE.
-          05 WS-DET-ID        PIC 9(06).
+          05 WS-DET-ID        PIC X(30).
           05 FILLER           PIC X(1)  VALUE " ".
           05 WS-DET-TITEL     PIC X(24).
           05 FILLER           PIC X(1)  VALUE " ".

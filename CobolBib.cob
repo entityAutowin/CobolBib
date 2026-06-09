@@ -8,8 +8,9 @@
        DATA DIVISION.
        WORKING-STORAGE SECTION.
            01 WS-SELECTION PIC 9(1).
-           01  PR-INPUT-RECORD     PIC X(250).
-           01  PR-BUCH-NR          PIC 9(04).
+           01 PR-INPUT-RECORD     PIC X(250).
+           01 PR-BUCH-NR          PIC 9(04).
+           01 LK-SUCH-ID          PIC X(30) VALUE ZERO.
            COPY library.
 
        PROCEDURE DIVISION.
@@ -33,7 +34,8 @@
        2000-SELECTION-EVALUATION.
            EVALUATE WS-SELECTION
                WHEN 1 CONTINUE
-               WHEN 2 PERFORM 2100-ALLE-BUECHER-ANZEIGEN
+               WHEN 2 CALL "PrintMod" USING LK-BUECHER-LISTE
+                                                       LK-SUCH-ID
                WHEN 3 CONTINUE
                WHEN 4 CONTINUE
                WHEN 5 PERFORM 2500-ANZAHL-BUECHER
