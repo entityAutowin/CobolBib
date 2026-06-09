@@ -32,12 +32,18 @@
           05 FILLER           PIC X(10) VALUE "  Autoren:".
           05 WS-DET-AUTOR     PIC X(40).
 
+       01 WS-MATCH-FOUND           PIC X VALUE 'N'.
+       01 WS-I                     PIC 9(4).
+       01 WS-J                     PIC 9(2).
+
        LINKAGE SECTION.
            COPY library.
            
-       01 LK-SUCH-ID               PIC X(30).
+       01 LK-SEARCH-TYPE           PIC 9.
+       01 LK-SEARCH-TERM           PIC X(120).
 
-       PROCEDURE DIVISION USING LK-BUECHER-LISTE LK-SUCH-ID.
+       PROCEDURE DIVISION USING LK-BUECHER-LISTE LK-SEARCH-TYPE 
+                                LK-SEARCH-TERM.
        MAIN-LOGIC.
            IF LK-BUECHER-ANZAHL = 0
                DISPLAY "Keine Buecher im System vorhanden."
@@ -48,24 +54,51 @@
            DISPLAY WS-HEADER-2
            DISPLAY WS-HEADER-3
 
-           PERFORM VARYING BUCH-IDX FROM 1 BY 1 
-                     UNTIL BUCH-IDX > LK-BUECHER-ANZAHL
+           PERFORM VARYING WS-I FROM 1 BY 1 
+                     UNTIL WS-I > LK-BUECHER-ANZAHL
                
-               IF LK-SUCH-ID = ZERO OR LK-BUCH-ID(BUCH-IDX) = LK-SUCH-ID
-               
-                   MOVE LK-BUCH-ID(BUCH-IDX)        TO WS-DET-ID
-                   MOVE LK-BUCH-TITEL(BUCH-IDX)     TO WS-DET-TITEL
-                   MOVE LK-BUCH-KATEGORIE(BUCH-IDX) TO WS-DET-KAT
-                   MOVE LK-BUCH-VERLAG(BUCH-IDX)    TO WS-DET-VERLAG
+               MOVE 'N' TO WS-MATCH-FOUND
+               EVALUATE LK-SEARCH-TYPE
+                   WHEN
+                       MOVE 'Y' TO WS-MATCH-FOUND
+                   WHEN
+                       IF LK-BUCH-ID(WS-I) = LK-SEARCH-TERM(1:25)
+                           MOVE 'Y' TO WS-MATCH-FOUND
+                       END-IF
+                   WHEN
+                       IF LK-BUCH-TITEL(WS-I) = LK-SEARCH-TERM
+                           MOVE 'Y' TO WS-MATCH-FOUND
+                       END-IF
+                   WHEN
+                       IF LK-BUCH-KATEGORIE(WS-I) = 
+                          LK-SEARCH-TERM(1:20)
+                           MOVE 'Y' TO WS-MATCH-FOUND
+                       END-IF
+                   WHEN
+                       PERFORM VARYING WS-J FROM 1 BY 1
+                           UNTIL WS-J > LK-AUTOREN-ANZAHL(WS-I)
+                              OR WS-MATCH-FOUND = 'Y'
+                           IF LK-AUTOR-NAME(WS-I, WS-J) = 
+                              LK-SEARCH-TERM(1:40)
+                               MOVE 'Y' TO WS-MATCH-FOUND
+                           END-IF
+                       END-PERFORM
+               END-EVALUATE
+
+               IF WS-MATCH-FOUND = 'Y'
+                   MOVE LK-BUCH-ID(WS-I)        TO WS-DET-ID
+                   MOVE LK-BUCH-TITEL(WS-I)     TO WS-DET-TITEL
+                   MOVE LK-BUCH-KATEGORIE(WS-I) TO WS-DET-KAT
+                   MOVE LK-BUCH-VERLAG(WS-I)    TO WS-DET-VERLAG
                    
                    DISPLAY WS-BUCH-ZEILE
                    
-                   IF LK-AUTOREN-ANZAHL(BUCH-IDX) > 0
-                       PERFORM VARYING AUTOR-IDX FROM 1 BY 1
-                                 UNTIL AUTOR-IDX > 
-                                       LK-AUTOREN-ANZAHL(BUCH-IDX)
+                   IF LK-AUTOREN-ANZAHL(WS-I) > 0
+                       PERFORM VARYING WS-J FROM 1 BY 1
+                                 UNTIL WS-J > 
+                                       LK-AUTOREN-ANZAHL(WS-I)
                            
-                           MOVE LK-AUTOR-NAME(BUCH-IDX, AUTOR-IDX) 
+                           MOVE LK-AUTOR-NAME(WS-I, WS-J) 
                              TO WS-DET-AUTOR
                            DISPLAY WS-AUTOR-ZEILE
                            
@@ -82,4 +115,3 @@
            END-PERFORM.
 
            GOBACK.
-           

@@ -10,7 +10,8 @@
            01 WS-SELECTION PIC 9(1).
            01 PR-INPUT-RECORD     PIC X(250).
            01 PR-BUCH-NR          PIC 9(04).
-           01 LK-SUCH-ID          PIC X(30) VALUE ZERO.
+           01 WS-SEARCH-TYPE      PIC 9 VALUE 0.
+           01 WS-SEARCH-TERM      PIC X(120) VALUE SPACES.
            COPY library.
 
        PROCEDURE DIVISION.
@@ -38,9 +39,11 @@
        2000-SELECTION-EVALUATION.
            EVALUATE WS-SELECTION
                WHEN 1 CALL "CreateMod" USING LK-BUECHER-LISTE
-               WHEN 2 CALL "PrintMod" USING LK-BUECHER-LISTE
-                                            LK-SUCH-ID
-               WHEN 3 CONTINUE
+               WHEN 2 MOVE 0 TO WS-SEARCH-TYPE
+                      CALL "PrintMod" USING LK-BUECHER-LISTE
+                                            WS-SEARCH-TYPE
+                                            WS-SEARCH-TERM
+               WHEN 3 CALL "SearchMod" USING LK-BUECHER-LISTE
                WHEN 4 CALL "DeleteMod" USING LK-BUECHER-LISTE
                WHEN 5 PERFORM 2500-ANZAHL-BUECHER
                WHEN 6 CONTINUE
