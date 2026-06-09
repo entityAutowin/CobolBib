@@ -18,10 +18,14 @@
            CALL "ProcessRecord" USING PR-INPUT-RECORD
                                      PR-BUCH-NR
                                      LK-BUECHER-LISTE.
-           PERFORM 1000-USER-MENU.
-           PERFORM 2000-SELECTION-EVALUATION.
+           PERFORM UNTIL WS-SELECTION = 6
+               PERFORM 1000-USER-MENU
+               PERFORM 2000-SELECTION-EVALUATION
+           END-PERFORM.
+           STOP RUN.
 
        1000-USER-MENU.
+           DISPLAY " "
            DISPLAY "1 - Neues Buch eingeben".
            DISPLAY "2 - Alle Bücher anzeigen".
            DISPLAY "3 - Buch suchen".
@@ -37,11 +41,10 @@
                WHEN 2 CALL "PrintMod" USING LK-BUECHER-LISTE
                                             LK-SUCH-ID
                WHEN 3 CONTINUE
-               WHEN 4 CONTINUE
+               WHEN 4 CALL "DeleteMod" USING LK-BUECHER-LISTE
                WHEN 5 PERFORM 2500-ANZAHL-BUECHER
                WHEN 6 CONTINUE
-           END-EVALUATE
-           STOP RUN.
+           END-EVALUATE.
 
        2500-ANZAHL-BUECHER.
            DISPLAY "Anzahl Buecher: " LK-BUECHER-ANZAHL.

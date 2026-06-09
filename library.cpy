@@ -8,7 +8,7 @@
                                         DEPENDING ON LK-BUECHER-ANZAHL
                                         INDEXED BY BUCH-IDX.
                10  LK-BUCH-ID           PIC X(25).
-               10  LK-BUCH-TITEL        PIC X(50).
+               10  LK-BUCH-TITEL        PIC X(120).
                10  LK-BUCH-KATEGORIE    PIC X(20).
                10  LK-BUCH-VERLAG       PIC X(30).
 
