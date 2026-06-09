@@ -5,7 +5,7 @@
        CONFIGURATION SECTION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-           SELECT INPUT-FILE ASSIGN TO 'input/input.txt'
+           SELECT INPUT-FILE ASSIGN TO 'data/d.b'
                ORGANIZATION IS LINE SEQUENTIAL.
 
        DATA DIVISION.
