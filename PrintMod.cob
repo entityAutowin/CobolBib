@@ -59,22 +59,22 @@
                
                MOVE 'N' TO WS-MATCH-FOUND
                EVALUATE LK-SEARCH-TYPE
-                   WHEN
+                   WHEN 0
                        MOVE 'Y' TO WS-MATCH-FOUND
-                   WHEN
+                   WHEN 1
                        IF LK-BUCH-ID(WS-I) = LK-SEARCH-TERM(1:25)
                            MOVE 'Y' TO WS-MATCH-FOUND
                        END-IF
-                   WHEN
+                   WHEN 2
                        IF LK-BUCH-TITEL(WS-I) = LK-SEARCH-TERM
                            MOVE 'Y' TO WS-MATCH-FOUND
                        END-IF
-                   WHEN
-                       IF LK-BUCH-KATEGORIE(WS-I) = 
+                   WHEN 3
+                       IF LK-BUCH-KATEGORIE(WS-I) =
                           LK-SEARCH-TERM(1:20)
                            MOVE 'Y' TO WS-MATCH-FOUND
                        END-IF
-                   WHEN
+                   WHEN 4
                        PERFORM VARYING WS-J FROM 1 BY 1
                            UNTIL WS-J > LK-AUTOREN-ANZAHL(WS-I)
                               OR WS-MATCH-FOUND = 'Y'
