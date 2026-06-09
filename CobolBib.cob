@@ -35,27 +35,13 @@
            EVALUATE WS-SELECTION
                WHEN 1 CONTINUE
                WHEN 2 CALL "PrintMod" USING LK-BUECHER-LISTE
-                                                       LK-SUCH-ID
+                                            LK-SUCH-ID
                WHEN 3 CONTINUE
                WHEN 4 CONTINUE
                WHEN 5 PERFORM 2500-ANZAHL-BUECHER
                WHEN 6 CONTINUE
            END-EVALUATE
            STOP RUN.
-
-       2100-ALLE-BUECHER-ANZEIGEN.
-           PERFORM VARYING BUCH-IDX FROM 1 BY 1
-                   UNTIL BUCH-IDX > LK-BUECHER-ANZAHL
-               DISPLAY "--- " LK-BUCH-ID(BUCH-IDX) " ---"
-               DISPLAY "Titel    : " LK-BUCH-TITEL(BUCH-IDX)
-               DISPLAY "Kategorie: " LK-BUCH-KATEGORIE(BUCH-IDX)
-               DISPLAY "Verlag   : " LK-BUCH-VERLAG(BUCH-IDX)
-               PERFORM VARYING AUTOR-IDX FROM 1 BY 1
-                       UNTIL AUTOR-IDX > LK-AUTOREN-ANZAHL(BUCH-IDX)
-                   DISPLAY "Autor    : "
-                       LK-AUTOR-NAME(BUCH-IDX AUTOR-IDX)
-               END-PERFORM
-           END-PERFORM.
 
        2500-ANZAHL-BUECHER.
            DISPLAY "Anzahl Buecher: " LK-BUECHER-ANZAHL.
