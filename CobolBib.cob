@@ -37,7 +37,7 @@
 
        2000-SELECTION-EVALUATION.
            EVALUATE WS-SELECTION
-               WHEN 1 CONTINUE
+               WHEN 1 CALL "CreateMod" USING LK-BUECHER-LISTE
                WHEN 2 CALL "PrintMod" USING LK-BUECHER-LISTE
                                             LK-SUCH-ID
                WHEN 3 CONTINUE
