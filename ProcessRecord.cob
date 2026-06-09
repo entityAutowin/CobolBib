@@ -75,7 +75,7 @@
            MOVE SPACES TO WS-AUTOREN
            MOVE 0 TO WS-AUTOR-NR
 
-           UNSTRING WS-AUTOREN-STR DELIMITED BY ';'
+           UNSTRING WS-AUTOREN-STR DELIMITED BY '; '
                INTO WS-AUTOR(1) WS-AUTOR(2)
                     WS-AUTOR(3) WS-AUTOR(4) WS-AUTOR(5)
                TALLYING WS-AUTOR-NR
